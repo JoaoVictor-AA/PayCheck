@@ -3,6 +3,12 @@ from datetime import datetime
 from typing import Optional
 
 
+class UserOut(BaseModel):
+    name: str
+    password: str
+
+
+
 class CreateUser(BaseModel):
     name: str
-    created_at: datetime
+    password: str
