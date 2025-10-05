@@ -13,5 +13,9 @@ router = APIRouter(
 
 @router.post("/", response_model=schemas.UserOut)
 def create_user(user: schemas.CreateUser, db: Session = Depends(get_db)):
-    new_user = models.User()
+    new_user = models.User(**user.dict())
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return new_user
 
