@@ -1,6 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from typing import Optional
+from uuid import UUID
 
 
 class UserOut(BaseModel):
@@ -15,4 +16,12 @@ class CreateUser(BaseModel):
 
 
 class MakeTransaction(BaseModel):
-    pass
+    sender_id: int
+    receiver_id: int
+    valor: float
+
+class TransactionOut(BaseModel):
+    sender_id: int
+    receiver_id: int
+    valor: float
+    uuid: UUID
