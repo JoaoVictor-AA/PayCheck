@@ -5,10 +5,14 @@ from typing import Optional
 
 class UserOut(BaseModel):
     name: str
-    password: str
-
+    id: int
 
 
 class CreateUser(BaseModel):
     name: str
     password: str
+    email: str
+
+
+class MakeTransaction(BaseModel):
+    pass
