@@ -10,6 +10,7 @@ class User(Base):
     password = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
 
+
 class Transfer(Base):
     __tablename__ = "transfer"
     id = Column(Integer, nullable=False, primary_key=True)
