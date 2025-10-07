@@ -26,3 +26,14 @@ def get_by_uuid(uuid: UUID, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Not found any transaction with identifier {uuid}")
     return transaction
+
+
+@router.get("/")
+def get_transactions(sender_id: int | None= None, receiver_id: int | None=None, db: Session = Depends(get_db)):
+    query = db.query(models.Transfer)
+    if sender_id:
+        query = query.filter(models.Transfer.sender_id == sender_id)
+    if receiver_id:
+        query = query.filter(models.Transfer.receiver_id == receiver_id)
+    transactions = query.all()
+    return transactions
