@@ -20,8 +20,18 @@ class MakeTransaction(BaseModel):
     receiver_id: int
     valor: float
 
+
 class TransactionOut(BaseModel):
     sender_id: int
     receiver_id: int
     valor: float
     uuid: UUID
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    id: Optional[str] = None
