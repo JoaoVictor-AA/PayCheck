@@ -5,6 +5,7 @@ from sqlalchemy import func
 from .. import models, schemas
 from ..database import get_db
 from uuid import UUID
+from datetime import date, timedelta
 router = APIRouter(
     prefix="/transactions",
     tags=["Transactions"]
@@ -29,11 +30,16 @@ def get_by_uuid(uuid: UUID, db: Session = Depends(get_db)):
 
 
 @router.get("/")
-def get_transactions(sender_id: int | None= None, receiver_id: int | None=None, db: Session = Depends(get_db)):
+def get_transactions(sender_id: int | None= None, receiver_id: int | None=None, begin_time: date | None=None, end_time: date | None=None, db: Session = Depends(get_db)):
     query = db.query(models.Transfer)
     if sender_id:
         query = query.filter(models.Transfer.sender_id == sender_id)
     if receiver_id:
         query = query.filter(models.Transfer.receiver_id == receiver_id)
+    if begin_time:
+        query = query.filter(models.Transfer.time >= begin_time)
+    if end_time:
+        end_time = end_time + timedelta(days=1)
+        query = query.filter(models.Transfer.time <= end_time)
     transactions = query.all()
     return transactions
