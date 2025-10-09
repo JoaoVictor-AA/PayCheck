@@ -2,7 +2,7 @@ from fastapi import FastAPI, Response, status, HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from sqlalchemy import func
-from .. import models, schemas
+from app import models, schemas, oauth2
 from ..database import get_db
 from uuid import UUID
 from datetime import date, timedelta
@@ -13,8 +13,9 @@ router = APIRouter(
 
 
 @router.post("/", response_model=schemas.TransactionOut)
-def make_transaction(transfer: schemas.MakeTransaction, db: Session = Depends(get_db)):
-    new_transaction = models.Transfer(**transfer.dict())
+def make_transaction(transfer: schemas.MakeTransaction, db: Session = Depends(get_db),
+                     current_user: int = Depends(oauth2.get_current_user)):
+    new_transaction = models.Transfer(sender_id=current_user.id, **transfer.dict())
     db.add(new_transaction)
     db.commit()
     db.refresh(new_transaction)
